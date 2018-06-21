@@ -64,6 +64,19 @@
         </div>
 
         <div class="form-group">
+            <label class="control-label col-sm-2">Latitude:</label>
+            <div class="col-sm-10">
+                <input type="number" step="any" name="latitude" th:value="${restaurant.latitude}" id="latitude" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">Longitude:</label>
+            <div class="col-sm-10">
+                <input type="number" step="any" name="longitude" th:value="${restaurant.longitude}" id="longitude" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label col-sm-2">Categories:</label>
             <div class="col-xs-2" th:each="category : ${restaurantCategories}">
                 <input th:if=" ${restaurant.categories.contains(category)}" type="checkbox" name="categories"
