@@ -301,6 +301,7 @@
                 });
                 /*<![CDATA[*/
                 var restaurants = /*[[${restaurantsList}]]*/ 'default';
+                var bounds = new google.maps.LatLngBounds();
                 for (var i = 0; i < restaurants.length; i++) {
                     var marker = new google.maps.Marker({
                         position: {lat: restaurants[i].latitude, lng: restaurants[i].longitude},
@@ -311,6 +312,11 @@
                     google.maps.event.addListener(marker, 'click', function() {
                         window.location.href = this.url;
                     });
+                    bounds.extend({lat: restaurants[i].latitude, lng: restaurants[i].longitude});
+                }
+                map.fitBounds(bounds);
+                if(restaurants.length == 1){
+                    map.setZoom(16);
                 }
                 /*]]>*/
 

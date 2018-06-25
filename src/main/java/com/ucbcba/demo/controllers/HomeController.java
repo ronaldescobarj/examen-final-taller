@@ -95,7 +95,7 @@ public class HomeController {
         model.addAttribute("restaurants", filteredRestaurants);
         List<Restaurant> restaurantsList = new ArrayList<>();
 
-        restaurantService.listAllRestaurants().forEach(r -> {
+        filteredRestaurants.forEach(r -> {
             Restaurant rest = new Restaurant();
             rest.setId(r.getId());
             rest.setName(r.getName());
