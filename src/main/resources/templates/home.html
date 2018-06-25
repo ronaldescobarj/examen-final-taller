@@ -252,6 +252,12 @@
                         <option th:each="city : ${cities}" th:value="${city.name}"
                                 th:selected="${city.name} == ${citySelected}" th:text="${city.name}"></option>
                     </select>
+                    <select class="btn btn-default" id="scoresDropdown" onchange="changeSearchFilter()"
+                            name="scoresDropdown">
+                        <option value="All scores">All scores</option>
+                        <option th:each="score : ${scores}" th:value="${score.calif}" th:text="${score.n}" th:selected="${score.calif} == ${scoreSelected}"></option>
+                    </select>
+
                     <input type="hidden" id="showContent" name="showContent" th:value="${showTable}"/>
                     <input type="hidden" id="firstTime" name="firstTime" th:value="${firstTime}"/>
                     <input class="btn btn-default" type="submit" style="display:inline;" value="Search"/>

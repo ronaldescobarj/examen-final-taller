@@ -191,7 +191,22 @@
                         </a>
                     </div>
                     <h4 class="control-label col-md-1"><b>Score: </b></h4>
-                    <h4 class="col-md-1" th:text="${averageScore}"></h4>
+                    <h4 class="col-md-5"><span class="glyphicon glyphicon-star-empty" value="1" text="1" id="st1"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="2" text="2" id="st2"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="3" text="3" id="st3"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="4" text="4" id="st4"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="5" text="5" id="st5"></span></h4>
+                    <input type="hidden" id="restScore" th:value="${averageScore}"></input>
+                    <script>
+                        var rest = document.getElementById('restScore');
+                        console.log(rest.value);
+                        /*<![CDATA[*/
+                        for(var i=1 ;i<=rest.value;i++){
+                           document.getElementById('st'+i).classList.remove('glyphicon', 'glyphicon-star-empty');
+                            document.getElementById('st'+i).classList.add('glyphicon', 'glyphicon-star');
+                        }
+                        /*]]>*/
+                    </script>
                 </div>
             </div>
             <div th:if="${!logged}" class="form-group">
@@ -295,11 +310,80 @@
                             <div class="form-group">
                                 <div class="col-md-9">
                                     <span>Score: </span>
-                                    <select th:field="*{score}">
-                                        <option class="btn btn-default dropdown-toggle" th:each="score : ${calification}" th:value="${score}" th:text="${score}">
-                                        </option>
-                                    </select>
+                                    <span class="glyphicon glyphicon-star-empty" value="1" text="1" id="star1" onmouseover="star('1')" onmouseleave="dstar('1')" onclick="starr('1')"></span>
+                                    <span class="glyphicon glyphicon-star-empty" value="2" text="2" id="star2" onmouseover="star('2')" onmouseleave="dstar('2')" onclick="starr('2')"></span>
+                                    <span class="glyphicon glyphicon-star-empty" value="3" text="3" id="star3" onmouseover="star('3')" onmouseleave="dstar('3')" onclick="starr('3')"></span>
+                                    <span class="glyphicon glyphicon-star-empty" value="4" text="4" id="star4" onmouseover="star('4')" onmouseleave="dstar('4')" onclick="starr('4')"></span>
+                                    <span class="glyphicon glyphicon-star-empty" value="5" text="5" id="star5" onmouseover="star('5')" onmouseleave="dstar('5')" onclick="starr('5')"></span>
+                                    <input type="hidden" name="score" id="score"/>
+                                    <input th:if="${userComment!=null}" th:value="${userComment.score}" type="hidden" name="score" id="scores" />
                                 </div>
+
+                                <script type="text/javascript">
+
+                                    var score= document.getElementById('scores');
+                                    console.log(score.value);
+                                    /*<![CDATA[*/
+                                    for(var i=1 ;i<=score.value;i++){
+                                       document.getElementById('star'+i).classList.remove('glyphicon', 'glyphicon-star-empty');
+                                        document.getElementById('star'+i).classList.add('glyphicon', 'glyphicon-star','click');
+                                    }
+
+                                    /*]]>*/
+                                    function star(n){
+                                    var id='star'+n;
+                                    console.log(id);
+                                    /*<![CDATA[*/
+
+                                    for(var i=1 ;i<=n;i++){
+                                    if(!document.getElementById('star'+i).classList.contains('click'))
+                                        document.getElementById('star'+i).classList.remove('glyphicon', 'glyphicon-star-empty');
+                                        document.getElementById('star'+i).classList.add('glyphicon', 'glyphicon-star','over');
+                                    }
+                                     /*]]>*/
+
+                                    };
+                                    function dstar(n){
+                                    var id='star'+n;
+                                    console.log(id);
+                                    /*<![CDATA[*/
+                                    for(var i=1 ;i<=n;i++){
+                                       if(document.getElementById('star'+i).classList.contains('over') && !document.getElementById('star'+i).classList.contains('click')){
+                                        document.getElementById('star'+i).classList.remove('glyphicon', 'glyphicon-star','over');
+                                        document.getElementById('star'+i).classList.add('glyphicon', 'glyphicon-star-empty');
+                                        }
+                                    }
+                                     /*]]>*/
+                                    };
+                                    function starr(n){
+                                    var id='star'+ n;
+                                    console.log(id);
+                                    var value = document.getElementById('score');
+
+                                    /*<![CDATA[*/
+                                    if(n<value){
+                                       for(var i=5 ;i>n;i--){
+                                       if(document.getElementById('star'+i).classList.contains('click')){
+                                        document.getElementById('star'+i).classList.remove('glyphicon', 'glyphicon-star','click');
+                                        document.getElementById('star'+i).classList.add('glyphicon', 'glyphicon-star-empty');
+                                        }
+                                    }
+                                    }
+                                    value.value = n;
+                                    console.log(value);
+                                    for(var i=1 ;i<=n;i++){
+                                       document.getElementById('star'+i).classList.remove('glyphicon', 'glyphicon-star','over');
+                                        document.getElementById('star'+i).classList.add('glyphicon', 'glyphicon-star','click');
+                                    }
+                                     /*]]>*/
+                                   }
+                                   function load(n){
+                                    var score = document.getElementById('scores');
+                                    score.value=0;
+                                    console.log(n);
+                                   }
+
+                                </script>
                             </div>
 
                             <div class="form-group">
