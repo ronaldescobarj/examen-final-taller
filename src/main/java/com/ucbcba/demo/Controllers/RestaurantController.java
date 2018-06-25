@@ -280,6 +280,7 @@ public class RestaurantController {
     @RequestMapping(value = "/user/edit/{id}")
     public String userEdit(@PathVariable Integer id, Model model) {
         model.addAttribute("user",userService.findById(id));
+        model.addAttribute("cities",cityService.listAllCities());
         return "userEdit";
     }
 

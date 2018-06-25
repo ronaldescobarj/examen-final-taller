@@ -32,14 +32,16 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-    public String welcome(Model model, @RequestParam(value = "searchFilter", required = false, defaultValue = "") String searchFilter, @RequestParam(value = "cityDropdown", required = false, defaultValue = "") String cityDropdown, @RequestParam(value = "showContent", required = false, defaultValue = "") String showContent) {
+    public String welcome(Model model, @RequestParam(value = "searchFilter", required = false, defaultValue = "") String searchFilter, @RequestParam(value = "cityDropdown", required = false, defaultValue = "") String cityDropdown, @RequestParam(value = "showContent", required = false, defaultValue = "") String showContent,@RequestParam(value = "firstTime", required = false, defaultValue = "true") String firstTime) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Boolean logged = (!getUserRole(auth).equals("notLogged"));
         com.ucbcba.demo.entities.User user = new com.ucbcba.demo.entities.User();
         User u;
+        Integer city = -1;
         if (logged) {
             u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
             user = userService.findByUsername(u.getUsername());
+            city = user.getCity().getId();
         }
         model.addAttribute("user", user);
         model.addAttribute("role", getUserRole(auth));
@@ -55,7 +57,7 @@ public class HomeController {
         if (!cityDropdown.equals("All cities")) {
             citySelected = cityDropdown;
         }
-        model.addAttribute("citySelected", citySelected);
+
 
         String showTable = "table";
         if (showContent.equals("map")) {
@@ -69,29 +71,38 @@ public class HomeController {
             allRestaurants.add(restaurant);
         }
 
-        if (cityDropdown.equals("All cities")) {
-            filteredRestaurants = allRestaurants.stream().filter(
-                    p -> (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
-                            || searchCategories(p.getCategories(), searchFilter.toLowerCase())
-                    )
-            ).collect(Collectors.toList());
-        } else {
-            filteredRestaurants = allRestaurants.stream().filter(
-                    p -> (
-                            (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
-                                    || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
-                                    && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
-                    )
-            ).collect(Collectors.toList());
+        String first = "false";
+        if(firstTime.equals("true") && city != -1)
+        {
+            filteredRestaurants = (List<Restaurant>) restaurantService.listAllRestaurantsByCity(city);
+            citySelected = user.getCity().getName();
         }
-
+        else
+        {
+            if (cityDropdown.equals("All cities")) {
+                filteredRestaurants = allRestaurants.stream().filter(
+                        p -> (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
+                                || searchCategories(p.getCategories(), searchFilter.toLowerCase())
+                        )
+                ).collect(Collectors.toList());
+            } else {
+                filteredRestaurants = allRestaurants.stream().filter(
+                        p -> (
+                                (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
+                                        || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
+                                        && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
+                        )
+                ).collect(Collectors.toList());
+            }
+        }
         filteredRestaurants.sort((r1, r2) -> {
             Integer s1, s2;
             s1 = restaurantService.getScore(r1.getId());
             s2 = restaurantService.getScore(r2.getId());
             return s2.compareTo(s1);
         });
-
+        model.addAttribute("citySelected", citySelected);
+        model.addAttribute("firstTime",first);
         model.addAttribute("restaurants", filteredRestaurants);
         List<Restaurant> restaurantsList = new ArrayList<>();
 
@@ -106,6 +117,7 @@ public class HomeController {
         model.addAttribute("restaurantsList", restaurantsList);
         return "home";
     }
+
 
     private Boolean searchCategories(Set<Category> categories, String param) {
         for (Category category : categories) {

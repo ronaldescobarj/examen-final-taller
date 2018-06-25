@@ -25,6 +25,13 @@ public class User {
     @Size(min=1, message="This field cannot be blank")
     private String lastName;
 
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private List<UserLike> userLikes;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
@@ -91,6 +98,30 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public List<UserLike> getUserLikes() {
+        return userLikes;
+    }
+
+    public void setUserLikes(List<UserLike> userLikes) {
+        this.userLikes = userLikes;
     }
 }
                                         

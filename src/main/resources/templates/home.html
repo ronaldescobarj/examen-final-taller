@@ -253,6 +253,7 @@
                                 th:selected="${city.name} == ${citySelected}" th:text="${city.name}"></option>
                     </select>
                     <input type="hidden" id="showContent" name="showContent" th:value="${showTable}"/>
+                    <input type="hidden" id="firstTime" name="firstTime" th:value="${firstTime}"/>
                     <input class="btn btn-default" type="submit" style="display:inline;" value="Search"/>
                 </form>
             </li>
@@ -264,7 +265,6 @@
                 function show(type) {
                     document.getElementById("showContent").value = type;
                     document.getElementById("myForm").submit();
-
                 }
             </script>
         </ul>

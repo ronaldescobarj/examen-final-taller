@@ -117,6 +117,7 @@
         <h3> Name: <span style="color:black" th:text="${thisUser.firstName}"></span> <span th:text="${thisUser.lastName}"></span></h3>
         <h3> User Name: <span th:text="${thisUser.username}"></span></h3>
         <h3> Email: <span th:text="${thisUser.email}"></span></h3>
+        <h3> City: <span th:text="${thisUser.city.name}"></span></h3>
         <div th:if="${thisUser.role == 'ADMIN'}">
             <h5>Administrador</h5>
         </div>

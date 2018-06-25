@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //demonios
@@ -24,6 +25,18 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Iterable<Restaurant> listAllRestaurants() {
         return restaurantRepository.findAll();
+    }
+
+    @Override
+    public Iterable<Restaurant> listAllRestaurantsByCity(Integer city) {
+        List<Restaurant> restaurants = (List<Restaurant>) restaurantRepository.findAll();
+        List<Restaurant> res = new ArrayList<>();
+        for(Restaurant restaurant:restaurants) {
+            if(restaurant.getCity().getId() == city) {
+                res.add(restaurant);
+            }
+        }
+        return res;
     }
 
     @Override
