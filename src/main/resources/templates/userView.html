@@ -127,7 +127,7 @@
         <h3 style="text-align:center">Comments</h3>
         <div th:each="comment : ${comments}" class="row">
             <div class="container">
-                <p><a th:href="${'/restaurant/' + comment.restaurant.id}" th:text="${comment.restaurant.name}"></a> Score: <span th:text="${comment.score}"></span> Likes: <span th:text="${comment.likes}"></span> </p>
+                <p><a th:href="${'/restaurant/' + comment.restaurant.id}" th:text="${comment.restaurant.name}"></a> Score: <span th:text="${comment.score}"></span> </p>
                 <p th:text="${comment.text}"></p>
             </div>
             <br/>
