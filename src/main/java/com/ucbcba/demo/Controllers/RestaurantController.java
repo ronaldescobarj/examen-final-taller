@@ -225,6 +225,11 @@ public class RestaurantController {
         model.addAttribute("averageScore", restaurantService.getScore(id));
         model.addAttribute("commentError", "You can only add one comment by Restaurant");
         model.addAttribute("restaurant", restaurant);
+        Restaurant mapRest = new Restaurant();
+        mapRest.setLatitude(restaurant.getLatitude());
+        mapRest.setLongitude(restaurant.getLongitude());
+        mapRest.setName(restaurant.getName());
+        model.addAttribute("mapRestaurant", mapRest);
         model.addAttribute("isLiked", isLiked);
         model.addAttribute("logged", logged);
         model.addAttribute("photos", restaurantPhotos);

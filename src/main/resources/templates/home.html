@@ -186,7 +186,7 @@
         /* Always set the map height explicitly to define the size of the div
          * element that contains the map. */
         #map {
-            height: 100%;
+            height: 300px;
         }
 
         /* Optional: Makes the sample page fill the window. */
@@ -294,27 +294,37 @@
         </table>
         <div th:if="${showTable=='map'}" id="map"></div>
         <script th:inline="javascript">
+            var map;
             function initMap() {
-                var map = new google.maps.Map(document.getElementById('map'), {
+                map = new google.maps.Map(document.getElementById('map'), {
                     center: {lat: -16.1795, lng: -64.8531},
                     zoom: 8
                 });
                 /*<![CDATA[*/
                 var restaurants = /*[[${restaurantsList}]]*/ 'default';
+                var bounds = new google.maps.LatLngBounds();
                 for (var i = 0; i < restaurants.length; i++) {
                     var marker = new google.maps.Marker({
                         position: {lat: restaurants[i].latitude, lng: restaurants[i].longitude},
                         map: map,
-                        title: restaurants[i].name
+                        title: restaurants[i].name,
+                        url: 'restaurant/' + restaurants[i].id
                     });
+                    google.maps.event.addListener(marker, 'click', function() {
+                        window.location.href = this.url;
+                    });
+                    bounds.extend({lat: restaurants[i].latitude, lng: restaurants[i].longitude});
+                }
+                map.fitBounds(bounds);
+                if(restaurants.length == 1){
+                    map.setZoom(16);
                 }
                 /*]]>*/
-            }
 
+            }
         </script>
         <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyYErgX5t-pShxDcxp3FbHX4Cdnmb01f0&amp;callback=initMap"
-                async defer></script>
--->
+                async defer></script>-->
         <script async="async" defer="defer"
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyYErgX5t-pShxDcxp3FbHX4Cdnmb01f0&amp;callback=initMap">
         </script>
