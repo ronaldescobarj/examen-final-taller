@@ -97,6 +97,7 @@ public class HomeController {
 
         restaurantService.listAllRestaurants().forEach(r -> {
             Restaurant rest = new Restaurant();
+            rest.setId(r.getId());
             rest.setName(r.getName());
             rest.setLatitude(r.getLatitude());
             rest.setLongitude(r.getLongitude());
