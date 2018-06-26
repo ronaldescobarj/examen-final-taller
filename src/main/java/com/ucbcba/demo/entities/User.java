@@ -123,5 +123,6 @@ public class User {
     public void setUserLikes(List<UserLike> userLikes) {
         this.userLikes = userLikes;
     }
+    
 }
                                         
