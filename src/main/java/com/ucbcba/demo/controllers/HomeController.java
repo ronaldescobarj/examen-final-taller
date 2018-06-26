@@ -33,41 +33,46 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-    public String welcome(Model model, @RequestParam(value = "searchFilter", required = false, defaultValue = "") String searchFilter, @RequestParam(value = "cityDropdown", required = false, defaultValue = "") String cityDropdown,@RequestParam(value = "scoresDropdown", required = false, defaultValue = "") String scoresDropdown, @RequestParam(value = "showContent", required = false, defaultValue = "") String showContent,@RequestParam(value = "firstTime", required = false, defaultValue = "true") String firstTime) {
+    public String welcome(Model model, @RequestParam(value = "searchFilter", required = false, defaultValue = "") String searchFilter, @RequestParam(value = "cityDropdown", required = false, defaultValue = "") String cityDropdown, @RequestParam(value = "scoresDropdown", required = false, defaultValue = "") String scoresDropdown, @RequestParam(value = "showContent", required = false, defaultValue = "") String showContent, @RequestParam(value = "firstTime", required = false, defaultValue = "true") String firstTime) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Boolean logged = (!getUserRole(auth).equals("notLogged"));
         com.ucbcba.demo.entities.User user = new com.ucbcba.demo.entities.User();
-        class Score {String n;Integer calif;
+        class Score {
+            String n;
+            Integer calif;
 
-        public Score(String n,Integer a){
-            this.n=n;
-            this.calif=a;
-        }
+            public Score(String n, Integer a) {
+                this.n = n;
+                this.calif = a;
+            }
 
-        public String getN(){
-            return n;
-        }
-        public Integer getCalif(){
-            return calif;
-        }
-        public void setN(String n){
-            this.n=n;
-        }
-        public void setCalif(Integer n){
-            this.calif=n;
-        }
+            public String getN() {
+                return n;
+            }
+
+            public Integer getCalif() {
+                return calif;
+            }
+
+            public void setN(String n) {
+                this.n = n;
+            }
+
+            public void setCalif(Integer n) {
+                this.calif = n;
+            }
         }
         Score[] score = new Score[5];
-        score[0] = new Score("Grater than 1 star",1);
-        score[1] = new Score("Grater than 2 star",2);
-        score[2] = new Score("Grater than 3 star",3);
-        score[3] = new Score("Grater than 4 star",4);
-        score[4] = new Score("Grater than 5 star",5);
+        score[0] = new Score("Grater than 1 star", 1);
+        score[1] = new Score("Grater than 2 star", 2);
+        score[2] = new Score("Grater than 3 star", 3);
+        score[3] = new Score("Grater than 4 star", 4);
+        score[4] = new Score("Grater than 5 star", 5);
 
         User u;
         Integer city = -1;
         if (logged) {
-            u = (org.springframework.security.core.userdetails.User)auth.getPrincipal();
+            u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
             user = userService.findByUsername(u.getUsername());
             city = user.getCity().getId();
         }
@@ -75,7 +80,7 @@ public class HomeController {
         model.addAttribute("role", getUserRole(auth));
         model.addAttribute("logged", logged);
         model.addAttribute("cities", cityService.listAllCities());
-        model.addAttribute("scores",score);
+        model.addAttribute("scores", score);
         String search = "";
         if (!searchFilter.equals("")) {
             search = searchFilter;
@@ -88,7 +93,7 @@ public class HomeController {
         }
 
         String scoreSelected = "";
-        if(!scoresDropdown.equals("All scores")){
+        if (!scoresDropdown.equals("All scores")) {
             scoreSelected = scoresDropdown;
         }
 
@@ -104,12 +109,10 @@ public class HomeController {
         }
 
         String first = "false";
-        if(firstTime.equals("true") && city != -1)
-        {
+        if (firstTime.equals("true") && city != -1) {
             filteredRestaurants = (List<Restaurant>) restaurantService.listAllRestaurantsByCity(city);
             citySelected = user.getCity().getName();
-        }
-        else {
+        } else {
             if (cityDropdown.equals("All cities") && scoresDropdown.equals("All scores")) {
                 filteredRestaurants = allRestaurants.stream().filter(
                         p -> (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
@@ -122,37 +125,36 @@ public class HomeController {
                 if (!cityDropdown.equals("All cities") && scoresDropdown.equals("All scores")) {
                     filteredRestaurants = allRestaurants.stream().filter(
                             p -> (
-                                (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
-                                        || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
-                                        && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
+                                    (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
+                                            || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
+                                            && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
                             )
                     ).collect(Collectors.toList());
                 } else {
                     if (cityDropdown.equals("All cities") && !scoresDropdown.equals("All scores")) {
                         filteredRestaurants = allRestaurants.stream().filter(
                                 p -> (
-                                    (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
-                                            || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
-                                            && restaurantService.getScore(p.getId()) >= Integer.parseInt(scoresDropdown)
+                                        (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
+                                                || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
+                                                && restaurantService.getScore(p.getId()) >= Integer.parseInt(scoresDropdown)
                                 )
 
                         ).collect(Collectors.toList());
-                    }
-                    else {
-                        if(!cityDropdown.equals("All cities") && !scoresDropdown.equals("All scores")){
+                    } else {
+                        if (!cityDropdown.equals("All cities") && !scoresDropdown.equals("All scores")) {
                             filteredRestaurants = allRestaurants.stream().filter(
-                                p -> (
-                                    (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
-                                            || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
-                                            && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
-                                            && restaurantService.getScore(p.getId()) >= Integer.parseInt(scoresDropdown)
-                                )
+                                    p -> (
+                                            (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
+                                                    || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
+                                                    && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
+                                                    && restaurantService.getScore(p.getId()) >= Integer.parseInt(scoresDropdown)
+                                    )
                             ).collect(Collectors.toList());
                         }
                     }
-                    
+
                 }
-            } 
+            }
         }
 
         filteredRestaurants.sort((r1, r2) -> {
@@ -162,8 +164,8 @@ public class HomeController {
             return s2.compareTo(s1);
         });
         model.addAttribute("citySelected", citySelected);
-        model.addAttribute("scoreSelected",scoreSelected);
-        model.addAttribute("firstTime",first);
+        model.addAttribute("scoreSelected", scoreSelected);
+        model.addAttribute("firstTime", first);
         model.addAttribute("restaurants", filteredRestaurants);
         List<Restaurant> restaurantsList = new ArrayList<>();
 
@@ -191,7 +193,7 @@ public class HomeController {
 
     private String getUserRole(Authentication auth) {
         if (!auth.getPrincipal().equals("anonymousUser")) {
-            User u = (org.springframework.security.core.userdetails.User)auth.getPrincipal();
+            User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
             com.ucbcba.demo.entities.User user = userService.findByUsername(u.getUsername());
             return user.getRole().toLowerCase();
         }

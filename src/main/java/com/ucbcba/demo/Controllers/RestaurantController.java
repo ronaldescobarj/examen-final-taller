@@ -260,6 +260,7 @@ public class RestaurantController {
         com.ucbcba.demo.entities.User principalUser = userService.findByUsername(u.getUsername());
         com.ucbcba.demo.entities.User user = userService.findById(userId);
         Boolean userPrincipal = false;
+        Boolean logged = (!getUserRole(auth).equals("notLogged"));
         if(user.getId() == principalUser.getId())
         {
             userPrincipal =true;
@@ -274,6 +275,8 @@ public class RestaurantController {
         model.addAttribute("flag",haveComments);
         model.addAttribute("comments",comments);
         model.addAttribute("userFlag",userPrincipal);
+        model.addAttribute("logged", logged);
+        model.addAttribute("role", getUserRole(auth));
         return "userView";
     }
     @RequestMapping(value = "/user/save", method = RequestMethod.POST)
