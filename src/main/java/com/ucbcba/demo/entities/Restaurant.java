@@ -38,13 +38,16 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany()
     @JoinTable(name = "restaurant_category", joinColumns = @JoinColumn(name = "restaurant_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="category_id", referencedColumnName = "id"))
     private Set<Category> categories;
 
     @OneToMany(mappedBy = "restaurant",cascade = CascadeType.REMOVE)
     private List<Photo> photo;
+
+    @OneToMany(mappedBy = "restaurant",cascade = CascadeType.REMOVE)
+    private List<UserLike> userLikes;
 
     public List<Comment> getComments() {
         return comments;
@@ -124,5 +127,13 @@ public class Restaurant {
 
     public void setLongitude(Float longitude) {
         this.longitude = longitude;
+    }
+
+    public List<UserLike> getUserLikes() {
+        return userLikes;
+    }
+
+    public void setUserLikes(List<UserLike> userLikes) {
+        this.userLikes = userLikes;
     }
 }

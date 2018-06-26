@@ -81,6 +81,7 @@
                     <option th:each="score : ${scores}" th:value="${score.calif}"
                             th:selected="${score.calif} == ${scoreSelected}" th:text="${score.n}"></option>
                 </select>
+                <input type="hidden" id="firstTime" name="firstTime" th:value="${firstTime}"/>
                 <input type="hidden" id="showContent" name="showContent" th:value="${showTable}"/>
                 <button class="btn btn-outline-dark mx-sm-3 mb-2" onclick="show('table')">Table</button>
                 <button class="btn btn-outline-dark mx-sm-3 mb-2" onclick="show('map')">Map</button>
