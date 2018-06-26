@@ -1,6 +1,7 @@
-package com.ucbcba.demo.controllers;
+package com.ucbcba.demo.Controllers;
 
 import com.ucbcba.demo.entities.User;
+import com.ucbcba.demo.services.CityService;
 import com.ucbcba.demo.services.RestaurantService;
 import com.ucbcba.demo.services.SecurityService;
 import com.ucbcba.demo.services.UserService;
@@ -18,16 +19,18 @@ import javax.validation.Valid;
 @Controller
 public class LoginController {
     private final UserService userService;
-
     private final SecurityService securityService;
-
     private RestaurantService restaurantService;
+    private CityService cityService;
 
     @Autowired
     public void setRestaurantService(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
-
+    @Autowired
+    public void setCityService(CityService cityService) {
+        this.cityService = cityService;
+    }
     @Autowired
     public LoginController(UserService userService, SecurityService securityService) {
         this.userService = userService;
@@ -40,6 +43,7 @@ public class LoginController {
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registrationInit(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("cities",cityService.listAllCities());
         return "registration";
     }
 
@@ -54,23 +58,27 @@ public class LoginController {
             bindingResult
                     .rejectValue("email", "error.user",
                             "There is already a user registered with the email provided");
+            model.addAttribute("cities",cityService.listAllCities());
             return "registration";
         }
         if (userExists != null) {
             bindingResult
                     .rejectValue("username", "error.user",
                             "There is already a user registered with the username provided");
+            model.addAttribute("cities",cityService.listAllCities());
             return "registration";
         }
         if(password.compareTo(confirmation)==1) {
             bindingResult
                     .rejectValue("passwordConfirm","error.user",
                             "Passwords does not match");
+            model.addAttribute("cities",cityService.listAllCities());
             return "registration";
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "Invalid information, please try again");
+            model.addAttribute("cities",cityService.listAllCities());
             return "registration";
 
         } else {
@@ -79,6 +87,7 @@ public class LoginController {
             model.addAttribute("successMessage", "User has been registered successfully");
             model.addAttribute("user", new User());
         }
+        model.addAttribute("cities",cityService.listAllCities());
         return "registration";
     }
 

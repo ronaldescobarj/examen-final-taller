@@ -50,7 +50,23 @@
                 <label class="control-label col-md-1"><b>Likes:</b></label>
                 <p class="col-md-1" th:text="${likes}"></p>
                 <label class="control-label col-md-1"><b>Score:</b> </label>
-                <p class="col-md-1" th:text="${averageScore}"></p>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+                <p class="col-md-5"><span href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" class="glyphicon glyphicon-star-empty" value="1" text="1" id="st1"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="2" text="2" id="st2"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="3" text="3" id="st3"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="4" text="4" id="st4"></span>
+                    <span class="glyphicon glyphicon-star-empty" value="5" text="5" id="st5"></span></p>
+                <input type="hidden" id="restScore" th:value="${averageScore}"></input>
+                <script>
+                        var rest = document.getElementById('restScore');
+                        console.log(rest.value);
+                        /*<![CDATA[*/
+                        for(var i=1 ;i<=rest.value;i++){
+                           document.getElementById('st'+i).classList.remove('glyphicon', 'glyphicon-star-empty');
+                            document.getElementById('st'+i).classList.add('glyphicon', 'glyphicon-star');
+                        }
+                        /*]]>*/
+                    </script>
             </div>
         </div>
 

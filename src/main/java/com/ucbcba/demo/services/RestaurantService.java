@@ -11,6 +11,8 @@ public interface RestaurantService {
     
     Iterable<Restaurant> listAllRestaurants();
 
+    Iterable<Restaurant> listAllRestaurantsByCity(Integer city);
+
     void saveRestaurant(Restaurant restaurant);
 
     Restaurant getRestaurant(Integer id);
@@ -22,5 +24,7 @@ public interface RestaurantService {
     Comment alreadyCommented(Integer userId, Integer restId);
 
     Integer getScore(Integer id);
+
+
 
 }
