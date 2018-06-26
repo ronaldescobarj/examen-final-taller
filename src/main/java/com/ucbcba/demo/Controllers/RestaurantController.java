@@ -137,6 +137,7 @@ public class RestaurantController {
     String editRestaurant(@PathVariable Integer id, Model model) throws UnsupportedEncodingException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Boolean logged = false;
+        com.ucbcba.demo.entities.User user = userService.findByUsername(((User) auth.getPrincipal()).getUsername());
         if (!auth.getPrincipal().equals("anonymousUser")) {
             logged = true;
         }
@@ -155,6 +156,7 @@ public class RestaurantController {
         model.addAttribute("cities", cityService.listAllCities());
         model.addAttribute("photos", restaurantPhotos);
         model.addAttribute("images", photoService.listAllPhotosById(id));
+        model.addAttribute("user", user);
         return "restaurantForm";
     }
 
@@ -190,7 +192,7 @@ public class RestaurantController {
         Boolean logged = (!getUserRole(auth).equals("notLogged"));
         Integer califs[] = {1, 2, 3, 4, 5};
         Restaurant restaurant = restaurantService.getRestaurant(id);
-        Comment comment=new Comment();
+        Comment comment = new Comment();
         Integer likes = userLikesService.getLikes(id);
         Boolean isLiked = false;
 
@@ -209,13 +211,12 @@ public class RestaurantController {
             isLiked = userLikesService.isLiked(user.getId(), id);
             model.addAttribute("user", user);
             Comment userComment = restaurantService.alreadyCommented(user.getId(), restaurant.getId());
-            if(userComment!=null) {
-                comment=userComment;
+            if (userComment != null) {
+                comment = userComment;
                 model.addAttribute("comment", comment);
                 model.addAttribute("userComment", userComment);
-            }
-            else
-                comment=new Comment(restaurant,user);
+            } else
+                comment = new Comment(restaurant, user);
             model.addAttribute("comment", comment);
 
         }
@@ -253,64 +254,64 @@ public class RestaurantController {
         }
         return "notLogged";
     }
+
     @RequestMapping(value = "user/view/{userId}", method = RequestMethod.GET)
-    public String userView(Model model,@PathVariable Integer userId ) {
+    public String userView(Model model, @PathVariable Integer userId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         com.ucbcba.demo.entities.User principalUser = userService.findByUsername(u.getUsername());
         com.ucbcba.demo.entities.User user = userService.findById(userId);
         Boolean userPrincipal = false;
         Boolean logged = (!getUserRole(auth).equals("notLogged"));
-        if(user.getId() == principalUser.getId())
-        {
-            userPrincipal =true;
+        if (user.getId() == principalUser.getId()) {
+            userPrincipal = true;
         }
         Boolean haveComments = true;
         List<Comment> comments = (List<Comment>) commentService.listAllCommentsByUser(user.getId());
-        if(comments.isEmpty())
-        {
+        if (comments.isEmpty()) {
             haveComments = false;
         }
-        model.addAttribute("thisUser",user);
-        model.addAttribute("flag",haveComments);
-        model.addAttribute("comments",comments);
-        model.addAttribute("userFlag",userPrincipal);
+        model.addAttribute("thisUser", user);
+        model.addAttribute("flag", haveComments);
+        model.addAttribute("comments", comments);
+        model.addAttribute("userFlag", userPrincipal);
         model.addAttribute("logged", logged);
         model.addAttribute("role", getUserRole(auth));
         return "userView";
     }
+
     @RequestMapping(value = "/user/save", method = RequestMethod.POST)
-    public String userView(com.ucbcba.demo.entities.User user ) {
+    public String userView(com.ucbcba.demo.entities.User user) {
         userService.save2(user);
-        return "redirect:/user/view/"+user.getId();
+        return "redirect:/user/view/" + user.getId();
     }
 
     @RequestMapping(value = "/user/edit/{id}")
     public String userEdit(@PathVariable Integer id, Model model) {
-        model.addAttribute("user",userService.findById(id));
-        model.addAttribute("cities",cityService.listAllCities());
+        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("cities", cityService.listAllCities());
         return "userEdit";
     }
 
     @RequestMapping(value = "/changePassword/{id}")
     public String changePassword(@PathVariable Integer id, Model model) {
-        model.addAttribute("user",userService.findById(id));
+        model.addAttribute("user", userService.findById(id));
         return "changePassword";
     }
 
-    @RequestMapping(value = "/savePassword",method = RequestMethod.POST)
+    @RequestMapping(value = "/savePassword", method = RequestMethod.POST)
     public String savePassword(Model model, com.ucbcba.demo.entities.User user) {
         Boolean error = false;
-        if(!user.getPassword().equals(user.getPasswordConfirm()))
-        {
+        if (!user.getPassword().equals(user.getPasswordConfirm())) {
             error = true;
-            model.addAttribute("error",error);
-            model.addAttribute("user",user);
+            model.addAttribute("error", error);
+            model.addAttribute("user", user);
             return "changePassword";
         }
         userService.save(user);
-        return "redirect:/user/view/"+user.getId();
+        return "redirect:/user/view/" + user.getId();
     }
+
     @RequestMapping(value = "/user/delete/{id}")
     String userDelete(@PathVariable Integer id, Model model) {
         userService.deleteUser(id);
