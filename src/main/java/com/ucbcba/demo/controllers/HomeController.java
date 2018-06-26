@@ -71,11 +71,9 @@ public class HomeController {
 
         User u;
         Integer city = -1;
-        System.out.println("city " + city);
         if (logged) {
             u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
             user = userService.findByUsername(u.getUsername());
-            System.out.println("user " + user);
             city = user.getCity().getId();
         }
         model.addAttribute("user", user);
