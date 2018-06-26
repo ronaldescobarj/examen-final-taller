@@ -24,11 +24,11 @@ public class Comment {
     @Column(columnDefinition = "int(11) default 0")
     private Integer likes=0;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne()
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
