@@ -73,6 +73,14 @@
                     <option th:each="city : ${cities}" th:value="${city.name}"
                             th:selected="${city.name} == ${citySelected}" th:text="${city.name}"></option>
                 </select>
+
+                <select class="btn btn-outline-dark dropdown-toggle mx-sm-3 mb-2" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" id="scoresDropdown" onchange="changeSearchFilter()"
+                        name="scoresDropdown">
+                    <option value="All scores">All scores</option>
+                    <option th:each="score : ${scores}" th:value="${score.calif}"
+                            th:selected="${score.calif} == ${scoreSelected}" th:text="${score.n}"></option>
+                </select>
                 <input type="hidden" id="showContent" name="showContent" th:value="${showTable}"/>
                 <button class="btn btn-outline-dark mx-sm-3 mb-2" onclick="show('table')">Table</button>
                 <button class="btn btn-outline-dark mx-sm-3 mb-2" onclick="show('map')">Map</button>
