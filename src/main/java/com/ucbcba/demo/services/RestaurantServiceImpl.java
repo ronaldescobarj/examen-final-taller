@@ -73,10 +73,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Integer getScore(Integer id) {
         Integer average = 0;
         List<Comment> comments=listAllComments(id);
-        if(!comments.isEmpty()){for(int i=0;i<comments.size();i++) {
-            average=average+comments.get(i).getScore();
-        }
-         average=average/comments.size();}
+        if(!comments.isEmpty()){
+            for(int i=0;i<comments.size();i++) {
+                average=average+comments.get(i).getScore();
+            }
+            average=average/comments.size();}
         return average;
     }
 

@@ -31,10 +31,16 @@ public class RestaurantController {
     private UserLikesService userLikesService;
     private UserService userService;
     private CommentService commentService;
+    private LevelRestaurantService levelRestaurantService;
 
     @Autowired
     public void setRestaurantService(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
+    }
+
+    @Autowired
+    public void setLevelRestaurantService(LevelRestaurantService levelRestaurantService) {
+        this.levelRestaurantService = levelRestaurantService;
     }
 
     @Autowired
@@ -83,6 +89,7 @@ public class RestaurantController {
     public String newRestaurant(Model model) {
         model.addAttribute("restaurantCategories", categoryService.listAllCategories());
         model.addAttribute("cities", cityService.listAllCities());
+        model.addAttribute("levelRestaurants", levelRestaurantService.listAllLevelRestaurants());
         model.addAttribute("restaurant", new Restaurant());
         return "newRestaurant";
     }
@@ -154,6 +161,7 @@ public class RestaurantController {
         model.addAttribute("restaurant", restaurantService.getRestaurant(id));
         model.addAttribute("restaurantCategories", categoryService.listAllCategories());
         model.addAttribute("cities", cityService.listAllCities());
+        model.addAttribute("levelRestaurants", levelRestaurantService.listAllLevelRestaurants());
         model.addAttribute("photos", restaurantPhotos);
         model.addAttribute("images", photoService.listAllPhotosById(id));
         model.addAttribute("user", user);
@@ -234,6 +242,42 @@ public class RestaurantController {
         model.addAttribute("isLiked", isLiked);
         model.addAttribute("logged", logged);
         model.addAttribute("photos", restaurantPhotos);
+        String textAverageScore;
+        String colorTextAverageScore;
+        if (restaurantService.getScore(id) < 1) {
+            textAverageScore = "Impopular";
+        }
+        else {
+            if (restaurantService.getScore(id) < 2) {
+                textAverageScore = "Poco popular";
+            }
+            else {
+                if (restaurantService.getScore(id) < 3) {
+                    textAverageScore = "Intermedio";
+                }
+                else {
+                    if (restaurantService.getScore(id) < 4) {
+                        textAverageScore = "Popular";
+                    }
+                    else {
+                        textAverageScore = "Muy popular";
+                    }
+                }
+            }
+        }
+        if (restaurantService.getScore(id) < restaurant.getLevelRestaurant().getRating()) {
+            colorTextAverageScore = "#FF0000";
+        }
+        else {
+            if (restaurantService.getScore(id) == restaurant.getLevelRestaurant().getRating()) {
+                colorTextAverageScore = "#FFFF00";
+            }
+            else {
+                colorTextAverageScore = "#008000";
+            }
+        }
+        model.addAttribute("textAverageScore", textAverageScore);
+        model.addAttribute("colorTextAverageScore", colorTextAverageScore);
         return "restaurantUserView";
     }
 
