@@ -10,6 +10,19 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 300px;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
     <script>
         function changeSearchFilter() {
             document.getElementById("myForm").submit();
@@ -124,9 +137,7 @@
 </script>
 <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyYErgX5t-pShxDcxp3FbHX4Cdnmb01f0&amp;callback=initMap"
 async defer></script>-->
-<script async="async" defer="defer"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyYErgX5t-pShxDcxp3FbHX4Cdnmb01f0&amp;callback=initMap">
-</script>
+
 
 <script th:inline="javascript">
     var map;
@@ -158,6 +169,10 @@ async defer></script>-->
         /*]]>*/
 
     }
+</script>
+
+<script async="async" defer="defer"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyYErgX5t-pShxDcxp3FbHX4Cdnmb01f0&amp;callback=initMap">
 </script>
 
 <!-- Footer -->
