@@ -111,12 +111,11 @@ public class HomeController {
         }
 
         String first = "false";
-        Integer scoreInput;
-        if (scoresDropdown.equals("")) {
-            scoreInput = 0;
-        } else {
+        Integer scoreInput=0;
+        if (!scoresDropdown.equals("") && !scoresDropdown.equals("All scores")) {
             scoreInput = Integer.parseInt(scoresDropdown);
         }
+        final Integer compScore=scoreInput;
         if (firstTime.equals("true") && city != -1) {
             filteredRestaurants = (List<Restaurant>) restaurantService.listAllRestaurantsByCity(city);
             citySelected = user.getCity().getName();
@@ -144,7 +143,7 @@ public class HomeController {
                                 p -> (
                                         (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
                                                 || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
-                                                && restaurantService.getScore(p.getId()) >= scoreInput
+                                                && restaurantService.getScore(p.getId()) >= compScore
                                 )
 
                         ).collect(Collectors.toList());
@@ -155,7 +154,7 @@ public class HomeController {
                                             (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
                                                     || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
                                                     && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
-                                                    && restaurantService.getScore(p.getId()) >= scoreInput
+                                                    && restaurantService.getScore(p.getId()) >= compScore
                                     )
                             ).collect(Collectors.toList());
                         }
