@@ -71,9 +71,11 @@ public class HomeController {
 
         User u;
         Integer city = -1;
+        System.out.println("city " + city);
         if (logged) {
             u = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
             user = userService.findByUsername(u.getUsername());
+            System.out.println("user " + user);
             city = user.getCity().getId();
         }
         model.addAttribute("user", user);
@@ -109,6 +111,12 @@ public class HomeController {
         }
 
         String first = "false";
+        Integer scoreInput;
+        if (scoresDropdown.equals("")) {
+            scoreInput = 0;
+        } else {
+            scoreInput = Integer.parseInt(scoresDropdown);
+        }
         if (firstTime.equals("true") && city != -1) {
             filteredRestaurants = (List<Restaurant>) restaurantService.listAllRestaurantsByCity(city);
             citySelected = user.getCity().getName();
@@ -136,7 +144,7 @@ public class HomeController {
                                 p -> (
                                         (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
                                                 || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
-                                                && restaurantService.getScore(p.getId()) >= Integer.parseInt(scoresDropdown)
+                                                && restaurantService.getScore(p.getId()) >= scoreInput
                                 )
 
                         ).collect(Collectors.toList());
@@ -147,7 +155,7 @@ public class HomeController {
                                             (p.getName().toLowerCase().contains(searchFilter.toLowerCase())
                                                     || searchCategories(p.getCategories(), searchFilter.toLowerCase()))
                                                     && p.getCity().getName().toLowerCase().contains(cityDropdown.toLowerCase())
-                                                    && restaurantService.getScore(p.getId()) >= Integer.parseInt(scoresDropdown)
+                                                    && restaurantService.getScore(p.getId()) >= scoreInput
                                     )
                             ).collect(Collectors.toList());
                         }
